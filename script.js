@@ -1388,3 +1388,29 @@ async function deleteBook(id) {
 
     loadBooks();
 }
+// ==========================
+// SECTION SWITCHING
+// ==========================
+
+function showSection(sectionId) {
+
+    document.getElementById("dates-section")
+        .classList.add("hidden");
+
+    document.getElementById("portraits-section")
+        .classList.add("hidden");
+
+    document.getElementById("books-section")
+        .classList.add("hidden");
+
+    document.getElementById(sectionId)
+        .classList.remove("hidden");
+
+    if (sectionId === "portraits-section") {
+        loadPortraits();
+    }
+
+    if (sectionId === "books-section") {
+        loadBooks();
+    }
+}
