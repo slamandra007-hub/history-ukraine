@@ -1391,7 +1391,38 @@ async function deleteBook(id) {
 // ==========================
 // SECTION SWITCHING
 // ==========================
+function showSection(sectionId) {
 
+    document.getElementById("dates-section")
+        .classList.add("hidden");
+
+    document.getElementById("portraits-section")
+        .classList.add("hidden");
+
+    document.getElementById("books-section")
+        .classList.add("hidden");
+
+    const section = document.getElementById(sectionId);
+
+    if (!section) {
+        console.error("Секцію не знайдено:", sectionId);
+        return;
+    }
+
+    section.classList.remove("hidden");
+
+    if (sectionId === "portraits-section") {
+        loadPortraits();
+    }
+
+    if (sectionId === "books-section") {
+        loadBooks();
+    }
+
+    if (sectionId === "dates-section") {
+        loadDates();
+    }
+}
 function showSection(sectionId) {
 
     document.getElementById("dates-section")
