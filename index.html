@@ -53,7 +53,7 @@
 
         <div class="top-bar">
             <div>
-                <h2>Привіт! 👋</h2>
+                
                 <p id="user-email"></p>
             </div>
 
@@ -109,7 +109,43 @@
 
             <div id="dates-list"></div>
             
+<div class="date-flashcards">
 
+    <h2>🃏 Флешкарти</h2>
+
+    <div id="flashcard-area">
+
+        <p id="flashcard-type"></p>
+
+        <h3 id="flashcard-question"></h3>
+
+        <div id="flashcard-options"></div>
+
+        <p id="flashcard-result"></p>
+
+        <button id="next-card" onclick="nextFlashcard()">
+            ➡️ Наступна картка
+        </button>
+
+    </div>
+
+    <div class="flashcard-controls">
+
+        <button onclick="startDateFlashcards('date-to-event')">
+            📅 Дата → Подія
+        </button>
+
+        <button onclick="startDateFlashcards('event-to-date')">
+            📖 Подія → Дата
+        </button>
+
+        <button onclick="startDateFlashcards('mixed')">
+            🔀 Перемішати
+        </button>
+
+    </div>
+
+</div>
         </div>
 <!-- PORTRAITS -->
 
