@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Історія України</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🇺🇦 Історія України</h1>
+    <p class="subtitle">Твій персональний навчальний простір</p>
+
+    <!-- AUTH -->
+    <section id="auth-section">
+
+        <div class="auth-box">
+
+            <h2 id="auth-title">Вхід</h2>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Електронна пошта"
+            >
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Пароль"
+            >
+
+            <button id="auth-button" onclick="login()">
+                Увійти
+            </button>
+
+            <p id="auth-message"></p>
+
+            <button class="secondary" onclick="toggleAuth()">
+                Немає акаунта? Зареєструватися
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN -->
+    <section id="main-section" class="hidden">
+
+        <div class="top-bar">
+            <div>
+                <h2>Привіт! 👋</h2>
+                <p id="user-email"></p>
+            </div>
+
+            <button class="logout" onclick="logout()">
+                Вийти
+            </button>
+        </div>
+
+
+        <div class="menu">
+
+            <button onclick="showSection('dates-section')">
+                📅 Дати і події
+            </button>
+
+            <button onclick="showSection('portraits-section')">
+                👤 Портрети
+            </button>
+
+           <button onclick="showSection('books-section')">📚 Книги і конспекти</button>
+
+        </div>
+
+
+        <!-- DATES -->
+
+        <div id="dates-section">
+
+            <h2>📅 Дати і події</h2>
+
+            <div class="add-box">
+
+                <input
+                    type="text"
+                    id="date-input"
+                    placeholder="Дата, наприклад: 988"
+                >
+
+                <input
+                    type="text"
+                    id="event-input"
+                    placeholder="Подія"
+                >
+
+                <button onclick="addDateEvent()">
+                    + Додати
+                </button>
+
+            </div>
+
+
+            <h3>Мої дати</h3>
+
+            <div id="dates-list"></div>
+            
+
+        </div>
+<!-- PORTRAITS -->
+
+<div id="portraits-section" class="hidden">
+
+    <h2>👤 Портрети</h2>
+
+    <div class="portrait-add-box">
+
+        <input
+            type="text"
+            id="portrait-name"
+            placeholder="Ім'я історичної особи"
+        >
+
+        <textarea
+            id="portrait-description"
+            placeholder="Короткий опис (необов'язково)"
+        ></textarea>
+
+        <input
+            type="file"
+            id="portrait-file"
+            accept="image/*"
+        >
+
+        <button onclick="addPortrait()">
+            + Додати портрет
+        </button>
+
+    </div>
+
+    <h3>Мої портрети</h3>
+
+    <div id="portraits-list"></div>
+<div class="portrait-flashcards">
+    <h2>🧠 Флеш-картки</h2>
+
+    <div class="flashcard-buttons">
+        <button onclick="startPortraitFlashcards('image')">
+            🖼️ Портрет → ім'я
+        </button>
+
+        <button onclick="startPortraitFlashcards('name')">
+            👤 Ім'я → портрет
+        </button>
+    </div>
+
+    <div id="portrait-flashcard-area" class="hidden">
+
+        <p id="portrait-flashcard-type"></p>
+
+        <div id="portrait-flashcard-question"></div>
+
+        <div id="portrait-flashcard-options"></div>
+
+        <p id="portrait-flashcard-result"></p>
+
+        <button
+            id="next-portrait-card"
+            class="hidden"
+            onclick="nextPortraitFlashcard()">
+            Наступна →
+        </button>
+
+        <p>
+            Правильних:
+            <span id="portrait-correct-count">0</span>
+            /
+            <span id="portrait-total-count">0</span>
+        </p>
+
+    </div>
+</div>
+</div>
+
+<div id="books-section" class="hidden">
+    <h2>📚 Мої книги</h2>
+
+    <div class="book-add-box">
+        <input
+            type="text"
+            id="book-title"
+            placeholder="Назва книги"
+        >
+
+        <input
+            type="file"
+            id="book-file"
+            accept=".pdf"
+        >
+
+        <button onclick="addBook()">
+            + Додати книгу
+        </button>
+    </div>
+
+    <div id="books-list"></div>
+</div>
+    </section>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
