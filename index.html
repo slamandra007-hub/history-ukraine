@@ -53,7 +53,6 @@
 
         <div class="top-bar">
             <div>
-                
                 <p id="user-email"></p>
             </div>
 
@@ -82,71 +81,81 @@
 
         <div id="dates-section">
 
-            <h2>📅 Дати і події</h2>
+    <h2>📅 Дати і події</h2>
 
-            <div class="add-box">
+    <div class="add-box">
 
-                <input
-                    type="text"
-                    id="date-input"
-                    placeholder="Дата, наприклад: 988"
-                >
+        <input
+            type="text"
+            id="date-input"
+            placeholder="Дата, наприклад: 988"
+        >
 
-                <input
-                    type="text"
-                    id="event-input"
-                    placeholder="Подія"
-                >
+        <input
+            type="text"
+            id="event-input"
+            placeholder="Подія"
+        >
 
-                <button onclick="addDateEvent()">
-                    + Додати
-                </button>
-
-            </div>
-
-
-            <h3>Мої дати</h3>
-
-            <div id="dates-list"></div>
-            
-<div class="date-flashcards">
-
-    <h2>🃏 Флешкарти</h2>
-
-    <div id="flashcard-area">
-
-        <p id="flashcard-type"></p>
-
-        <h3 id="flashcard-question"></h3>
-
-        <div id="flashcard-options"></div>
-
-        <p id="flashcard-result"></p>
-
-        <button id="next-card" onclick="nextFlashcard()">
-            ➡️ Наступна картка
+        <button onclick="addDateEvent()">
+            + Додати
         </button>
 
     </div>
 
-    <div class="flashcard-controls">
+    <h3>Мої дати</h3>
 
-        <button onclick="startDateFlashcards('date-to-event')">
-            📅 Дата → Подія
-        </button>
+    <div id="dates-list"></div>
 
-        <button onclick="startDateFlashcards('event-to-date')">
-            📖 Подія → Дата
-        </button>
+    <div class="date-flashcards">
 
-        <button onclick="startDateFlashcards('mixed')">
-            🔀 Перемішати
-        </button>
+        <h2>🧠 Флеш-картки</h2>
+
+        <div class="flashcard-buttons">
+
+            <button onclick="startDateFlashcards('date-to-event')">
+                📅 Дата → Подія
+            </button>
+
+            <button onclick="startDateFlashcards('event-to-date')">
+                📖 Подія → Дата
+            </button>
+
+            <button onclick="startDateFlashcards('mixed')">
+                🔀 Перемішати
+            </button>
+
+        </div>
+
+        <div id="flashcard-area" class="hidden">
+
+            <p id="flashcard-type"></p>
+
+            <h3 id="flashcard-question"></h3>
+
+            <div id="flashcard-options"></div>
+
+            <p id="flashcard-result"></p>
+
+            <button
+                id="next-card"
+                class="hidden"
+                onclick="nextFlashcard()">
+                Наступна →
+            </button>
+
+            <p>
+                Правильних:
+                <span id="correct-count">0</span>
+                /
+                <span id="total-count">0</span>
+            </p>
+
+        </div>
 
     </div>
 
 </div>
-        </div>
 <!-- PORTRAITS -->
 
 <div id="portraits-section" class="hidden">
