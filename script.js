@@ -401,6 +401,9 @@ checkSession();
 // ==========================
 // FLASHCARDS
 // ==========================
+// ==========================
+// FLASHCARDS ДАТИ І ПОДІЇ
+// ==========================
 
 let flashcards = [];
 let currentCard = 0;
@@ -408,64 +411,52 @@ let correctAnswers = 0;
 let flashcardMode = "date";
 
 
-// Початок тесту
-async function startFlashcards(mode) {
+// Почати флешкарти
+async function startDateFlashcards(mode) {
 
-    flashcardMode = mode;
+    if (mode === "date-to-event") {
+    flashcardMode = "date";
+} else if (mode === "event-to-date") {
+    flashcardMode = "event";
+} else {
+    flashcardMode = "mixed";
+}
 
     const {
         data: { user }
     } = await supabaseClient.auth.getUser();
 
-    if (!user) return;
+    if (!user) {
+        alert("Потрібно увійти в акаунт.");
+        return;
+    }
 
-
-    const { data, error } =
-        await supabaseClient
-            .from("dates_events")
-            .select("*")
-            .eq("user_id", user.id);
-
+    const { data, error } = await supabaseClient
+        .from("dates_events")
+        .select("*")
+        .eq("user_id", user.id);
 
     if (error) {
-
-        alert(error.message);
+        alert("Помилка завантаження: " + error.message);
         return;
-
     }
-
 
     if (!data || data.length < 2) {
-
-        alert(
-            "Для флеш-карток потрібно щонайменше 2 дати та події."
-        );
-
+        alert("Для флешкарток потрібно щонайменше 2 дати та події.");
         return;
-
     }
-
 
     flashcards = shuffleArray([...data]);
 
     currentCard = 0;
     correctAnswers = 0;
 
-
     document
         .getElementById("flashcard-area")
         .classList.remove("hidden");
 
-
-    document
-        .getElementById("correct-count")
-        .textContent = 0;
-
-
-    document
-        .getElementById("total-count")
-        .textContent = 0;
-
+    document.getElementById("correct-count").textContent = "0";
+    document.getElementById("total-count").textContent = "0";
 
     showFlashcard();
 
@@ -481,15 +472,11 @@ async function startFlashcards(mode) {
 function showFlashcard() {
 
     if (currentCard >= flashcards.length) {
-
         finishFlashcards();
-
         return;
     }
 
-
     const card = flashcards[currentCard];
-
 
     const question =
         document.getElementById("flashcard-question");
@@ -503,41 +490,28 @@ function showFlashcard() {
     const result =
         document.getElementById("flashcard-result");
 
-
     result.textContent = "";
 
     document
         .getElementById("next-card")
         .classList.add("hidden");
 
-
     options.innerHTML = "";
-
 
     if (flashcardMode === "date") {
 
         type.textContent = "Яка подія відповідає цій даті?";
-
         question.textContent = card.date;
 
-        createOptions(
-            card,
-            "event"
-        );
+        createFlashcardOptions(card, "event");
 
     } else {
 
         type.textContent = "Яка дата відповідає цій події?";
-
         question.textContent = card.event;
 
-        createOptions(
-            card,
-            "date"
-        );
-
+        createFlashcardOptions(card, "date");
     }
-
 
     document
         .getElementById("total-count")
@@ -545,103 +519,75 @@ function showFlashcard() {
 }
 
 
-// Створення варіантів
-function createOptions(correctCard, answerType) {
+// Варіанти відповідей
+function createFlashcardOptions(correctCard, answerType) {
 
     const optionsContainer =
         document.getElementById("flashcard-options");
 
-
     let options = [correctCard];
 
-
-    const otherCards =
-        shuffleArray(
-            flashcards.filter(
-                item => item.id !== correctCard.id
-            )
-        );
-
-
-    options.push(
-        ...otherCards.slice(0, 3)
+    const otherCards = shuffleArray(
+        flashcards.filter(
+            item => item.id !== correctCard.id
+        )
     );
 
+    options.push(...otherCards.slice(0, 3));
 
-    options =
-        shuffleArray(options);
-
+    options = shuffleArray(options);
 
     options.forEach(item => {
 
-        const button =
-            document.createElement("button");
-
+        const button = document.createElement("button");
 
         button.className = "answer-button";
 
+        button.textContent = item[answerType];
 
-        button.textContent =
-            item[answerType];
+        button.addEventListener("click", () => {
 
-
-        button.onclick = () => {
-
-            checkAnswer(
+            checkDateAnswer(
                 item.id === correctCard.id,
                 button
             );
 
-        };
-
+        });
 
         optionsContainer.appendChild(button);
-
     });
 }
 
 
-// Перевірка
-function checkAnswer(isCorrect, clickedButton) {
+// Перевірити відповідь
+function checkDateAnswer(isCorrect, clickedButton) {
 
     const result =
         document.getElementById("flashcard-result");
 
-
     const buttons =
         document.querySelectorAll(".answer-button");
 
-
     buttons.forEach(button => {
-
         button.disabled = true;
-
     });
-
 
     if (isCorrect) {
 
         correctAnswers++;
 
-        result.textContent =
-            "✓ Правильно!";
-
+        result.textContent = "✓ Правильно!";
         clickedButton.classList.add("correct");
 
     } else {
 
-        result.textContent =
-            "✗ Неправильно.";
-
+        result.textContent = "✗ Неправильно.";
         clickedButton.classList.add("wrong");
-
     }
-
 
     document
         .getElementById("correct-count")
         .textContent = correctAnswers;
-
 
     document
         .getElementById("next-card")
@@ -654,36 +600,29 @@ function nextFlashcard() {
 
     currentCard++;
 
-    showFlashcard();
+    // Для режиму "перемішати" кожна нова картка
+    // може бути дата → подія або подія → дата
+    if (flashcardMode === "mixed") {
+        flashcardMode =
+            Math.random() < 0.5 ? "date" : "event";
+    }
 
+    showFlashcard();
 }
 
 
 // Завершення
 function finishFlashcards() {
 
-    const question =
-        document.getElementById("flashcard-question");
+    document.getElementById("flashcard-type").textContent =
+        "🎉 Тест завершено";
 
-    const type =
-        document.getElementById("flashcard-type");
-
-    const options =
-        document.getElementById("flashcard-options");
-
-    const result =
-        document.getElementById("flashcard-result");
-
-
-    type.textContent = "🎉 Тест завершено";
-
-    question.textContent =
+    document.getElementById("flashcard-question").textContent =
         `Твій результат: ${correctAnswers} / ${flashcards.length}`;
 
-    options.innerHTML = "";
+    document.getElementById("flashcard-options").innerHTML = "";
 
-    result.textContent = "";
-
+    document.getElementById("flashcard-result").textContent = "";
 
     document
         .getElementById("next-card")
@@ -691,42 +630,18 @@ function finishFlashcards() {
 }
 
 
-// Перемішування масиву
+// Правильне перемішування
 function shuffleArray(array) {
 
-    return array.sort(
-        () => Math.random() - 0.5
-    );
+    for (let i = array.length - 1; i > 0; i--) {
 
-}
+        const j = Math.floor(Math.random() * (i + 1));
 
-function showSection(sectionId) {
-
-    document
-        .getElementById("dates-section")
-        .classList.add("hidden");
-
-    document
-        .getElementById("portraits-section")
-        .classList.add("hidden");
-
-    document
-        .getElementById("books-section")
-        .classList.add("hidden");
-
-
-    document
-        .getElementById(sectionId)
-        .classList.remove("hidden");
-
-
-    if (sectionId === "portraits-section") {
-        loadPortraits();
+        [array[i], array[j]] =
+            [array[j], array[i]];
     }
 
-    if (sectionId === "books-section") {
-        loadBooks();
-    }
+    return array;
 }
 // ==========================
 // PORTRAITS
